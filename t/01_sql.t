@@ -6,17 +6,17 @@ use_ok 'Time::Moment::Ext';
 my $test_str1 = '2015-01-20 12:20:00';
 my $test_str2 = '2015-01-18';
 
-my $tm1 = Time::Moment::Ext->from_sql($test_str1);
+my $tm1 = Time::Moment::Ext->from_datetime($test_str1);
 
-ok($tm1, 'from_sql. datetime string');
+ok($tm1, 'from_datetime. datetime string');
 
 ok($tm1->year == 2015 && $tm1->month == 1 && $tm1->day == 20 && $tm1->hour == 12 && $tm1->minute == 20 && $tm1->second == 0, 'from_string check');
 
 ok($tm1->to_datetime eq $test_str1, 'to_datetime');
 
-my $tm2 = Time::Moment::Ext->from_sql($test_str2);
+my $tm2 = Time::Moment::Ext->from_datetime($test_str2);
 
-ok($tm2, 'from_sql. date only');
+ok($tm2, 'from_datetime. date only');
 
 ok($tm2->year == 2015 && $tm2->month == 1 && $tm2->day == 18 && $tm2->hour == 0 && $tm2->minute == 0 && $tm2->second == 0, 'from_string check');
 

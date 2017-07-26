@@ -6,9 +6,9 @@ Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
         use Time::Moment::Ext;
         
-        my $tm = Time::Moment::Ext->from_sql('2015-01-18');
+        my $tm = Time::Moment::Ext->from_datetime('2015-01-18');
         
-        my $tm2 = Time::Moment::Ext->from_sql('2015-01-20 10:33:45');
+        my $tm2 = Time::Moment::Ext->from_datetime('2015-01-20 10:33:45');
 
         my $tm3 = Time::Moment::Ext->strptime('2015-01-20 10:33:45', '%Y-%m-%d %H:%M:%S');
 
@@ -32,7 +32,7 @@ Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
 The method use all strptime features from [Time::Piece](https://metacpan.org/pod/Time::Piece)
 
-## from\_sql
+## from\_datetime
 
 Converting SQL data/datetime string to Time::Moment object
 
@@ -67,7 +67,7 @@ Return the day of month (alias to day\_of\_month)
 
 # VERSION
 
-version 0.02
+version 0.03
 
 # AUTHOR
 
