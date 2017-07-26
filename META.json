@@ -1,16 +1,16 @@
 {
    "abstract" : "Extend Time::Moment with strptime and SQL dates support",
    "author" : [
-      "(c) Konstantin Cherednichenko."
+      "Konstantin Cherednichenko <dshadowukraine@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "Minilla/v3.0.13, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "Time-Moment-Ext",
    "no_index" : {
@@ -42,9 +42,9 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.010",
-			"Time::Moment" : "0",
-			"Time::Piece" : "0"
+            "Time::Moment" : "0",
+            "Time::Piece" : "0",
+            "perl" : "5.010"
          }
       },
       "test" : {
@@ -67,6 +67,7 @@
    },
    "version" : "0.02",
    "x_contributors" : [
-      "Konstantin Cherednichenko <dshadowukraine@gmail.com>"
-   ]
+      "Konstantin Cherednichenko <konstantin_c@kntele.com>"
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.94"
 }

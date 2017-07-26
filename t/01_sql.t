@@ -24,10 +24,5 @@ ok($tm2->to_date eq $test_str2, 'to_date');
 
 ok($tm2->to_time eq '00:00:00', 'to_time');
 
-
-use Data::Dumper;
-
-die Dumper($tm2);
-
 done_testing;
 
