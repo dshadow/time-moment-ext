@@ -1,57 +1,81 @@
-NAME
-    Time::Moment::Ext - Extending Time::Moment to support SQL dates and
-    delta between two dates
+# NAME
 
-SYNOPSIS
-            use Time::Moment::Ext;
+Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
-            my $tm = Time::Moment::Ext->from_string('2015-01-18');
+# SYNOPSIS
+
+        use Time::Moment::Ext;
         
-            my $tm2 = Time::Moment::Ext->from_string('2015-01-20 10:33:45');
-
-            my $day_of_month = $tm->day;
-
-            my $years_diff = $tm->delta_years($tm2);
-
-            my $month_diff = $tm->delta_months($tm2);
+        my $tm = Time::Moment::Ext->from_sql('2015-01-18');
         
-            my $week_diff = $tm->delta_weeks($tm2);
+        my $tm2 = Time::Moment::Ext->from_sql('2015-01-20 10:33:45');
 
-            my $days_diff = $tm->delta_days($tm2);
+        my $tm3 = Time::Moment::Ext->strptime('2015-01-20 10:33:45', '%Y-%m-%d %H:%M:%S');
 
-            my $hours_diff = $tm->delta_hours($tm2);
+        say $tm->to_datetime;
 
-            my $minutes_diff = $tm->delta_minutes($tm2);
+        say $tm2->to_date;
 
-            # (you can use all other methods from Time::Moment)
+        say $tm3->to_time;
 
-DESCRIPTION
-    Time::Moment::Ext is a extending of Time::Moment module. It's add
-    support to SQL dates and delta between two dates
+        say $tm->day;
+        
+        # (you can use all other methods from Time::Moment)
 
-METHODS
-  from_string
-            $tm = Time::Moment::Ext->from_string('2015-01-18');
-            $tm2 = Time::Moment::Ext->from_string('2015-01-20 10:33:45');
+# DESCRIPTION
 
-  day
-            This is alias to $tm->day_of_month
+Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
-  delta_years
-  delta_month
-  delta_week
-  delta_days
-  delta_hours
-  delta_minutes
-SEE ALSO
-    see Time::Moment
+# SUBROUTINES/METHODS
 
-LICENSE
-    Copyright 2015 (C) Konstantin Cherednichenko.
+## strptime
 
-    This library is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+The method use all strptime features from [Time::Piece](https://metacpan.org/pod/Time::Piece)
 
-AUTHOR
-    Konstantin Cherednichenko <dshadowukraine@gmail.com>
+## from\_sql
 
+Converting SQL data/datetime string to Time::Moment object
+
+## to\_datetime
+
+Converting Time::Moment object to SQL datetime string
+
+## to\_date
+
+Converting Time::Moment object to date string
+
+## to\_time
+
+Converting Time::Moment object to time string
+
+## day
+
+Return the day of month (alias to day\_of\_month)
+
+# CONFIGURATION AND ENVIRONMENT
+
+# DIAGNOSTICS
+
+# INCOMPATIBILITIES
+
+# BUGS AND LIMITATIONS
+
+# DEPENDENCIES
+
+- [Time::Moment](https://metacpan.org/pod/Time::Moment)
+- [Time::Piece](https://metacpan.org/pod/Time::Piece)
+
+# VERSION
+
+version 0.02
+
+# AUTHOR
+
+Konstantin Cherednichenko <dshadowukraine@gmail.com>
+
+# LICENSE AND COPYRIGHT
+
+Copyright 2017 (c) Konstantin Cherednichenko.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl 5 itself.

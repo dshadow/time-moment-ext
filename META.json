@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Extend Time::Moment with strptime and SQL dates support",
    "author" : [
-      "Konstantin Cherednichenko <konstantin_c@kntele.com>"
+      "(c) Konstantin Cherednichenko."
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
@@ -42,7 +42,9 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008001"
+            "perl" : "5.010",
+			"Time::Moment" : "0",
+			"Time::Piece" : "0"
          }
       },
       "test" : {
@@ -52,5 +54,19 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/dshadow/time-moment-ext/issues"
+      },
+      "homepage" : "https://github.com/dshadow/time-moment-ext",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/dshadow/time-moment-ext.git",
+         "web" : "https://github.com/dshadow/time-moment-ext"
+      }
+   },
+   "version" : "0.02",
+   "x_contributors" : [
+      "Konstantin Cherednichenko <konstantin_c@kntele.com>"
+   ]
 }

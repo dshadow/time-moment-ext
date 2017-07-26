@@ -1,110 +1,46 @@
 package Time::Moment::Ext;
-use 5.008001;
+
+use 5.010;
 use strict;
 use warnings;
+use Time::Piece;
 
-our $VERSION = '0.01';
+use parent 'Time::Moment';
 
-use base 'Time::Moment';
+our $VERSION = '0.02';
 
-sub day {
-	shift->day_of_month(@_);
+my $SQL_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $SQL_DATE = '%Y-%m-%d';
+my $SQL_TIME = '%H:%M:%S';
+
+sub Time::Moment::strptime {
+    my ($class, $str, $format) = @_;
+    return unless ($str && $format);
+
+    return $class->from_object(scalar Time::Piece->strptime($str, $format));
 }
 
-sub from_string {
-	my ($class, $string) = @_;
+sub Time::Moment::from_sql {
+    my ($class, $str) = @_;
+	return unless $str;
 
-	if ($string)
-	{
-		my $l = length($string);
-
-		$string .= 'T00Z' if ($l == 10);
-		$string .= 'Z' if ($l == 19);
-	}
-
-	$class->SUPER::from_string($string, lenient => 1);
+    return $class->strptime($str, $SQL_FORMAT);
 }
 
-sub delta_years {
-	my ($class, $class2) = @_;
-
-	$class->_check_params($class2);
-
-	my $year = $class->year;
-	my $year2 = $class2->year;
-
-	return ($year > $year2)
-		? $year - $year2
-		: $year2 - $year
+sub Time::Moment::to_datetime {
+    return shift->strftime($SQL_FORMAT);
 }
 
-sub delta_months {
-	my ($class, $class2) = @_;
-
-	$class->_check_params($class2);
-
-	my $year = $class->year;
-	my $month = $class->month;
-
-	my $year2 = $class2->year;
-	my $month2 = $class2->month;
-
-	if ($year > $year2)
-	{
-		$year -= $year2;
-		$month += $year * 12 if ($year);
-		return $month - $month2;
-	}
-	else
-	{
-		$year2 -= $year;
-		$month2 += $year2 * 12 if ($year2);
-		return $month2 - $month;
-	}
+sub Time::Moment::to_date {
+	return shift->strftime($SQL_DATE);
 }
 
-sub delta_weeks {
-	shift->_calc_delta($_[0], 604800);
+sub Time::Moment::to_time {
+	return shift->strftime($SQL_TIME);
 }
 
-sub delta_days {
-	shift->_calc_delta($_[0], 86400);
-}
-
-sub delta_hours {
-	shift->_calc_delta($_[0], 3600);
-}
-
-sub delta_minutes {
-	shift->_calc_delta($_[0], 60);
-}
-
-sub delta_seconds {
-	shift->_calc_delta($_[0]);
-}
-
-sub _calc_delta {
-	my ($class, $class2, $div) = @_;
-
-	$class->_check_params($class2);
-
-	my $diff = $class->compare($class2);
-	return 0 if ($diff == 0);
-
-	$diff = ($diff > 0)
-		? $class->epoch - $class2->epoch
-		: $class2->epoch - $class->epoch;
-
-	return $div
-		? sprintf('%.f', $diff / $div) + 0
-		: $diff
-}
-
-sub _check_params {
-	unless ($_[1] && (ref($_[1]) eq 'Time::Moment' || ref($_[1]) eq __PACKAGE__)) {
-		require Carp;
-		Carp::croak('Param must be Time::Moment(::Ext) object');
-	}
+sub Time::Moment::day {
+	return shift->day_of_month;
 }
 
 1;
@@ -114,77 +50,90 @@ __END__
 
 =head1 NAME
 
-Time::Moment::Ext - Extending Time::Moment to support SQL dates and delta between two dates
+Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
 =head1 SYNOPSIS
 
 	use Time::Moment::Ext;
-
 	
-	my $tm = Time::Moment::Ext->from_string('2015-01-18');
+	my $tm = Time::Moment::Ext->from_sql('2015-01-18');
 	
-	my $tm2 = Time::Moment::Ext->from_string('2015-01-20 10:33:45');
+	my $tm2 = Time::Moment::Ext->from_sql('2015-01-20 10:33:45');
 
+	my $tm3 = Time::Moment::Ext->strptime('2015-01-20 10:33:45', '%Y-%m-%d %H:%M:%S');
+
+	say $tm->to_datetime;
+
+	say $tm2->to_date;
+
+	say $tm3->to_time;
+
+	say $tm->day;
 	
-	my $day_of_month = $tm->day;
-
-
-	my $years_diff = $tm->delta_years($tm2);
-
-	my $month_diff = $tm->delta_months($tm2);
-	
-	my $week_diff = $tm->delta_weeks($tm2);
-
-	my $days_diff = $tm->delta_days($tm2);
-
-	my $hours_diff = $tm->delta_hours($tm2);
-
-	my $minutes_diff = $tm->delta_minutes($tm2);
-
-
 	# (you can use all other methods from Time::Moment)
 
 =head1 DESCRIPTION
 
-Time::Moment::Ext is a extending of Time::Moment module. It's add support to SQL dates and delta between two dates
+Time::Moment::Ext - Extend Time::Moment with strptime and SQL dates support
 
-=head1 METHODS
+=head1 SUBROUTINES/METHODS
 
-=head2 from_string
+=head2 strptime
 
-	$tm = Time::Moment::Ext->from_string('2015-01-18');
-	$tm2 = Time::Moment::Ext->from_string('2015-01-20 10:33:45');
+The method use all strptime features from L<Time::Piece>
+
+=head2 from_sql
+
+Converting SQL data/datetime string to Time::Moment object
+
+=head2 to_datetime
+
+Converting Time::Moment object to SQL datetime string
+
+=head2 to_date
+
+Converting Time::Moment object to date string
+
+=head2 to_time
+
+Converting Time::Moment object to time string
 
 =head2 day
 
-	This is alias to $tm->day_of_month
+Return the day of month (alias to day_of_month)
 
-=head2 delta_years
+=head1 CONFIGURATION AND ENVIRONMENT
 
-=head2 delta_month
+=head1 DIAGNOSTICS
 
-=head2 delta_week
+=head1 INCOMPATIBILITIES
 
-=head2 delta_days
+=head1 BUGS AND LIMITATIONS
 
-=head2 delta_hours
+=head1 DEPENDENCIES
 
-=head2 delta_minutes
+=over
 
-=head1 SEE ALSO
+=item L<Time::Moment>
 
-see L<Time::Moment>
+=item L<Time::Piece>
 
-=head1 LICENSE
+=back
 
-Copyright 2015 (C) Konstantin Cherednichenko.
+=head1 VERSION
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+version 0.02
 
 =head1 AUTHOR
 
 Konstantin Cherednichenko E<lt>dshadowukraine@gmail.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2017 (c) Konstantin Cherednichenko.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl 5 itself.
 
 =cut
 
